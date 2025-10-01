@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Cosmic Dither Shader</title>
+  <style>
+    html, body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+    }
+    #c {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.156.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.156.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+
+    const canvas = document.querySelector('#c');
+    const renderer = new THREE.WebGLRenderer({canvas: canvas});
+
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+    const scene = new THREE.Scene();
+
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        iTime: { value: 0 },
+        iResolution: { value: new THREE.Vector3() }
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform float iTime;
+        uniform vec3 iResolution;
+        varying vec2 vUv;
+
+        const float SEED = 42.0;
+
+        float swayRandomized(float seed, float value)
+        {
+            float f = floor(value);
+            float start = sin((cos(f * seed) + sin(f * 1024.)) * 345. + seed);
+            float end   = sin((cos((f+1.) * seed) + sin((f+1.) * 1024.)) * 345. + seed);
+            return mix(start, end, smoothstep(0., 1., value - f));
+        }
+
+        float cosmic(float seed, vec3 con)
+        {
+            float sum = swayRandomized(seed, con.z + con.x);
+            sum = sum + swayRandomized(seed, con.x + con.y + sum);
+            sum = sum + swayRandomized(seed, con.y + con.z + sum);
+            return sum * 0.3333333333;
+        }
+
+        vec4 dither(float chance, vec2 uv)
+        {
+            return vec4(vec3(step(chance * 1.5,
+                                  dot(sin(uv.xy), cos(uv.yx)))
+                        ), 1.0);
+        }
+
+        void main()
+        {
+            vec2 fragCoord = vUv * iResolution.xy;
+            vec2 uv = fragCoord / iResolution.xy;
+            
+            float aTime = iTime * 0.125;
+            vec3 s = vec3(swayRandomized(-16405.31527, aTime - 1.11),
+                          swayRandomized(-77664.8142, aTime + 1.41),
+                          swayRandomized(-50993.5190, aTime + 2.61)) * 5.;
+            vec3 c = vec3(swayRandomized(-10527.92407, aTime - 1.11),
+                          swayRandomized(-61557.6687, aTime + 1.41),
+                          swayRandomized(-43527.8990, aTime + 2.61)) * 5.;
+            vec3 con = vec3(0.0004375, 0.0005625, 0.0008125) * aTime + c * uv.x + s * uv.y;
+            con.x = cosmic(SEED, con);
+            con.y = cosmic(SEED, con);
+            con.z = cosmic(SEED, con);
+            
+            gl_FragColor = dither(sin(con.z * 3.14159265), uv * iTime * 71.0);
+        }
+      `
+    });
+
+    const geometry = new THREE.PlaneGeometry(2, 2);
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    function render(time) {
+      time = time * 0.001;
+
+      if (resizeRendererToDisplaySize(renderer)) {
+        const canvas = renderer.domElement;
+        material.uniforms.iResolution.value.set(canvas.width, canvas.height, 1);
+      }
+
+      material.uniforms.iTime.value = time;
+    
+      renderer.render(scene, camera);
+    
+      requestAnimationFrame(render);
+    }
+
+    function resizeRendererToDisplaySize(renderer) {
+      const canvas = renderer.domElement;
+      const pixelRatio = window.devicePixelRatio;
+      const width  = Math.floor(canvas.clientWidth * pixelRatio);
+      const height = Math.floor(canvas.clientHeight * pixelRatio);
+      const needResize = canvas.width !== width || canvas.height !== height;
+      if (needResize) {
+        renderer.setSize(width, height, false);
+      }
+      return needResize;
+    }
+
+    requestAnimationFrame(render);
+
+  </script>
+</body>
+</html>
