@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -29,28 +29,28 @@
   }
   </script>
   <script type="module">
-    import * as THREE from 'three';
+    import * as THREE from 'three'; // importing the whole three js library 
 
-    const canvas = document.querySelector('#c');
-    const renderer = new THREE.WebGLRenderer({canvas: canvas});
+    const canvas = document.querySelector('#c'); // getting the canvas
+    const renderer = new THREE.WebGLRenderer({canvas: canvas}); // creating the renderer whihc will draw everything on the screen and display it on the canvas, take the whole 3d scene and display it on the screen using that canvas
 
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1); // making the camera, whihc is a 2d camera, it does not add perspective distortion, bcs i have am using a pattern so that is why we are using this camera
 
-    const scene = new THREE.Scene();
+    const scene = new THREE.Scene(); // creating the scene, it is a container whihc will hold everything like camera, lights and all of that
 
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        iTime: { value: 0 },
-        iResolution: { value: new THREE.Vector3() }
+    const material = new THREE.ShaderMaterial({ // skin of the object, like how it will appear
+      uniforms: { //values whihc we send from javascript to our shader to control time, resolution
+        iTime: { value: 0 }, // how much time has passed since we started so animation moves smoothly
+        iResolution: { value: new THREE.Vector3() } // resolution of the screen
       },
-      vertexShader: `
-        varying vec2 vUv;
+      vertexShader: ` 
+        varying vec2 vUv; 
         void main() {
           vUv = uv;
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
       `,
-      fragmentShader: `
+      fragmentShader: ` // color of the pixels
         uniform float iTime;
         uniform vec3 iResolution;
         varying vec2 vUv;
@@ -136,5 +136,187 @@
     requestAnimationFrame(render);
 
   </script>
+</body>
+</html> -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Dither Pattern Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .control-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            max-height: calc(100vh - 40px);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            z-index: 10;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .pattern-btn, .palette-btn {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .pattern-btn:hover, .palette-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .pattern-btn.active, .palette-btn.active {
+            background: #4a90e2;
+            color: white;
+        }
+
+        .action-btn {
+            background: #4a90e2;
+            color: white;
+            font-weight: bold;
+        }
+
+        .action-btn:hover {
+            background: #357abd;
+        }
+
+        #gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .gallery-item {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div class="control-panel">
+        <h1>Cosmic Dither</h1>
+        
+        <div class="section">
+            <h3>Pattern Style</h3>
+            <button class="pattern-btn active">Cosmic Dither</button>
+        </div>
+
+        <div class="section">
+            <h3>Parameters</h3>
+            
+            <label>
+                Time Scale: <span id="speed-value">0.125</span>
+                <input type="range" id="speed" min="0" max="0.5" step="0.001" value="0.125">
+            </label>
+
+            <label>
+                Dither Intensity: <span id="intensity-value">1.5</span>
+                <input type="range" id="intensity" min="0.5" max="3.0" step="0.1" value="1.5">
+            </label>
+
+            <label>
+                Pattern Frequency: <span id="frequency-value">71.0</span>
+                <input type="range" id="frequency" min="10" max="200" step="1" value="71.0">
+            </label>
+
+            <label>
+                Seed: <span id="seed-value">42.0</span>
+                <input type="range" id="seed" min="1" max="100" step="1" value="42.0">
+            </label>
+        </div>
+
+        <div class="section">
+            <h3>Actions</h3>
+            <button id="randomize-btn" class="action-btn">🎲 Randomize</button>
+            <button id="freeze-btn" class="action-btn">❄️ Freeze</button>
+            <button id="export-btn" class="action-btn">💾 Export PNG</button>
+        </div>
+
+        <div class="section">
+            <h3>Gallery</h3>
+            <div id="gallery"></div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
 </body>
 </html>
