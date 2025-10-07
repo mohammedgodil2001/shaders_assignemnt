@@ -142,7 +142,7 @@
 
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -273,7 +273,7 @@
     <div id="canvas-container"></div>
 
     <div class="control-panel">
-        <h1>Cosmic Dither</h1>
+        
         
         <div class="section">
             <h3>Pattern Style</h3>
@@ -306,9 +306,9 @@
 
         <div class="section">
             <h3>Actions</h3>
-            <button id="randomize-btn" class="action-btn">🎲 Randomize</button>
-            <button id="freeze-btn" class="action-btn">❄️ Freeze</button>
-            <button id="export-btn" class="action-btn">💾 Export PNG</button>
+            <button id="randomize-btn" class="action-btn">Randomize</button>
+            <button id="freeze-btn" class="action-btn">Freeze</button>
+            <button id="export-btn" class="action-btn">Export PNG</button>
         </div>
 
         <div class="section">
@@ -318,5 +318,167 @@
     </div>
 
     <script type="module" src="/src/main.js"></script>
+    
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shader Generator</title>
+    <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+    <video id="video" autoplay style="display: none;"></video>
+    <div id="canvas-container"></div>
+    <button id="toggle-panel-btn" class="toggle-panel">✕</button>
+    <div class="control-panel">
+        <h1>Pattern Generator</h1>
+        
+        <div class="section">
+            <h3>Select Shader</h3>
+            <select id="shader-select">
+                <option value="cosmic">Cosmic Dither</option>
+                <option value="pixelated">Pixelated Duotone</option>
+            </select>
+        </div>
+
+        <!-- Cosmic Dither Controls -->
+        <div id="cosmic-controls" class="shader-controls">
+            <div class="section">
+                <h3>Parameters</h3>
+                
+                <label>
+                    Time Scale: <span id="speed-value">0.125</span>
+                    <input type="range" id="speed" min="0" max="0.5" step="0.001" value="0.125">
+                </label>
+
+                <label>
+                    Dither Intensity: <span id="intensity-value">1.5</span>
+                    <input type="range" id="intensity" min="0.5" max="3.0" step="0.1" value="1.5">
+                </label>
+
+                <label>
+                    Pattern Frequency: <span id="frequency-value">71.0</span>
+                    <input type="range" id="frequency" min="10" max="200" step="1" value="71.0">
+                </label>
+
+                <label>
+                    Seed: <span id="seed-value">42.0</span>
+                    <input type="range" id="seed" min="1" max="100" step="1" value="42.0">
+                </label>
+                <label>
+                    Opacity: <span id="cosmic-opacity-value">1.00</span>
+                    <input type="range" id="cosmic-opacity" min="0" max="1" step="0.01" value="1.0">
+                </label>
+            </div>
+
+            <!-- <div class="section">
+                <h3>Actions</h3>
+                <button id="cosmic-randomize-btn" class="action-btn">Randomize</button>
+                <button id="cosmic-freeze-btn" class="action-btn">Freeze</button>
+                <button id="cosmic-export-btn" class="action-btn">Export PNG</button>
+            </div> -->
+
+            <div class="section">
+                <h3>Actions</h3>
+                <button id="cosmic-randomize-btn" class="action-btn">Randomize</button>
+                <button id="cosmic-freeze-btn" class="action-btn">Freeze</button>
+                <button id="cosmic-export-btn" class="action-btn">Export PNG</button>
+                <button id="cosmic-poster-btn" class="action-btn poster-btn">🎨 Create Poster</button>
+            </div>
+
+            <div class="section">
+                <h3>Gallery</h3>
+                <div id="cosmic-gallery"></div>
+            </div>
+        </div>
+
+        <!-- Pixelated Duotone Controls -->
+        <div id="pixelated-controls" class="shader-controls" style="display: none;">
+            <div class="section">
+                <h3>Camera Status</h3>
+                <div id="status" class="status">Starting camera...</div>
+            </div>
+
+            <div class="section">
+                <h3>Pixelation Style</h3>
+                <select id="style">
+                    <option value="0">Square Pixels</option>
+                    <option value="1">Circles/Dots</option>
+                    <option value="2">Hexagons</option>
+                    <option value="3">Triangles</option>
+                </select>
+            </div>
+
+            <div class="section">
+                <h3>Pixelation Settings</h3>
+                
+                <label>
+                    Split Position: <span id="split-value">1.50</span>
+                    <input type="range" id="split" min="0" max="2" step="0.05" value="1.5">
+                </label>
+
+                <label>
+                    Pixel Width: <span id="pixel-w-value">10</span>
+                    <input type="range" id="pixel-w" min="2" max="50" step="1" value="10">
+                </label>
+
+                <label>
+                    Pixel Height: <span id="pixel-h-value">10</span>
+                    <input type="range" id="pixel-h" min="2" max="50" step="1" value="10">
+                </label>
+                <label>
+                    Opacity: <span id="pixelated-opacity-value">1.00</span>
+                    <input type="range" id="pixelated-opacity" min="0" max="1" step="0.01" value="1.0">
+                </label>
+            </div>
+
+            <div class="section">
+                <h3>Colors</h3>
+                
+                <div class="color-row">
+                    <span>Background:</span>
+                    <input type="color" id="bg-color" value="#a1ab05">
+                </div>
+
+                <div class="color-row">
+                    <span>Foreground:</span>
+                    <input type="color" id="fg-color" value="#1c6b6b">
+                </div>
+
+                <label>
+                    Threshold: <span id="threshold-value">0.90</span>
+                    <input type="range" id="threshold" min="0" max="1.5" step="0.05" value="0.9">
+                </label>
+            </div>
+
+            <!-- <div class="section">
+                <h3>Actions</h3>
+                <button id="reset-btn" class="action-btn">Reset to Default</button>
+                <button id="pixelated-export-btn" class="action-btn">Export PNG</button>
+            </div> -->
+            <div class="section">
+                <h3>Actions</h3>
+                <button id="reset-btn" class="action-btn">Reset to Default</button>
+                <button id="pixelated-export-btn" class="action-btn">Export PNG</button>
+                <button id="pixelated-poster-btn" class="action-btn poster-btn">🎨 Create Poster</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
 </body>
 </html>
+
+
