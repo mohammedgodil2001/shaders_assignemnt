@@ -184,7 +184,7 @@ video {
     right: 10px;
     width: 40px;
     height: 40px;
-    background: rgba(74, 144, 226, 0.95);
+    background: rgb(139, 139, 255);
     border: none;
     border-radius: 50%;
     color: white;
