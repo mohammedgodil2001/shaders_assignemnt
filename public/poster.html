@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Poster</title>
+    
+    <link rel="stylesheet" href="https://use.typekit.net/zqe4age.css">
+    
+    
+    <link rel="stylesheet" href="./poster.css">
+</head>
+<body>
+    <div class="poster-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>Create Poster</h1>
+                <button id="back-btn" class="back-btn">← Back to Editor</button>
+            </div>
+
+            <!-- Template Selection -->
+            <section class="section">
+                <h3>Select Template</h3>
+                <div id="template-gallery" class="template-gallery">
+                    <!-- Templates inserted by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Text Customization -->
+            <section class="section" id="text-controls-section">
+                <h3>Customize Text</h3>
+                <div class="text-controls" id="text-controls">
+                    <!-- Text inputs inserted by JavaScript based on selected template -->
+                </div>
+            </section>
+
+            <!-- Size Selection -->
+            <section class="section">
+                <h3>Poster Size</h3>
+                <select id="size-select">
+                    <option value="a4">A4 (210×297mm) - Print Ready</option>
+                    <option value="a3">A3 (297×420mm) - Print Ready</option>
+                    <option value="a2">A2 (420×594mm) - Print Ready</option>
+                </select>
+            </section>
+
+            <!-- Actions -->
+            <section class="section">
+                <button id="download-btn" class="download-btn">💾 Download Poster</button>
+            </section>
+        </aside>
+
+        <!-- Right Preview Area -->
+        <main class="preview-area">
+            <div class="preview-container">
+                <canvas id="poster-canvas"></canvas>
+            </div>
+            <p class="preview-note">Preview shown at lower resolution. Download will be high-res (300 DPI)</p>
+        </main>
+    </div>
+
+    <script type="module" src="/src/poster.js"></script>
+</body>
+</html>

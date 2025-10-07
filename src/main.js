@@ -361,7 +361,15 @@ const setupControls = () => {
 }
 
 const createPoster = () => {
-    alert('Poster creator coming soon! This will open a modal with template selection.');
+     renderer.render(scene, camera);
+    const patternImage = renderer.domElement.toDataURL('image/png');
+    
+    
+    localStorage.setItem('patternImage', patternImage);
+    localStorage.setItem('patternType', currentShader); 
+    
+    
+    window.location.href = '/poster.html';
     
 }
 
