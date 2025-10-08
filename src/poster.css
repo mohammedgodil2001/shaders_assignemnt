@@ -1,4 +1,4 @@
- * {
+ /* * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -28,6 +28,8 @@
         .sidebar-header {
             padding: 30px 30px 20px;
             border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            flex-direction: column-reverse;
         }
 
         .sidebar-header h1 {
@@ -193,4 +195,230 @@
 
         .sidebar::-webkit-scrollbar-thumb:hover {
             background: #999;
-        }
+        } */
+
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f0f0f0;
+    overflow: hidden;
+}
+
+.poster-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* SIDEBAR STYLES - UPDATED */
+.sidebar {
+    width: 320px;
+    flex-shrink: 0;
+    background: #ffffff;
+    overflow-y: auto;
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    border-right: 1px solid #e0e0e0;
+}
+
+.sidebar-header {
+    padding: 20px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    background: #f8f8f8;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 1rem;
+}
+
+.sidebar-header h1 {
+    font-size: 25px;
+    /* margin-bottom: 15px; */
+    color: #1a1a1a;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-family: 'neue-haas-grotesk-display', sans-serif;
+}
+
+.back-btn {
+    padding: 5px 10px;
+    background: #adafb8;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    font-weight: 600;
+    color: #28292e;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'neue-haas-grotesk-display', sans-serif;
+    align-self: flex-start;
+}
+
+.back-btn:hover {
+    background: #c4c6cf;
+    transform: translateY(-1px);
+}
+
+.section {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.section:last-child {
+    border-bottom: none;
+}
+
+.section h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 12px;
+    letter-spacing: 1.2px;
+    font-weight: 500;
+    font-family: 'neue-haas-grotesk-display', sans-serif;
+}
+
+#template-select, #size-select {
+    width: 100%;
+    padding: 5px 40px 5px 4px;
+    background: #adafb8;
+    border: none;
+    color: #000000;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s;
+    font-family: 'neue-haas-grotesk-display', sans-serif;
+}
+
+#template-select:hover, #size-select:hover {
+    background: #c4c6cf;
+}
+
+#template-select:focus, #size-select:focus {
+    outline: none;
+    background: #c4c6cf;
+}
+
+.text-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.text-controls label {
+    display: flex;
+    flex-direction: column;
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    font-family: 'neue-haas-grotesk-display', sans-serif;
+}
+
+.text-controls input {
+    margin-top: 8px;
+    padding: 12px 14px;
+    border: 2px solid #e0e0e0;
+    border-radius: 0;
+    font-size: 14px;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.text-controls input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.text-controls input::placeholder {
+    color: #bbb;
+}
+
+.download-btn {
+    width: 100%;
+    padding: 5px 4px;
+    background: #000000;
+    border: none;
+    border-radius: 0;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'neue-haas-grotesk-display', sans-serif;
+}
+
+.download-btn:hover {
+    background: #333333;
+    transform: translateY(-1px);
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #f5f5f5;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* POSTER AREA - UNTOUCHED, ORIGINAL CODE */
+.preview-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    overflow: hidden;
+}
+
+.preview-container {
+    background: white;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    max-width: 90%;
+    max-height: 85%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#poster-canvas {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+}
+
+.preview-note {
+    margin-top: 15px;
+    font-size: 11px;
+    color: #666;
+    text-align: center;
+    font-style: italic;
+}
