@@ -240,25 +240,25 @@ const stopWebcam = () => {
 
 const startWebcam = async () => {
     if (video.srcObject) {
-        document.getElementById('status').textContent = '📷 Camera Active';
-        document.getElementById('status').style.color = '#00ff88';
+        document.getElementById('status').textContent = 'Camera Active';
+        document.getElementById('status').style.color = '#ffffffff';
         return;
     }
     
     try {
         document.getElementById('status').textContent = 'Starting camera...';
-        document.getElementById('status').style.color = '#ffff00';
+        document.getElementById('status').style.color = '#ffffffff';
         
         const stream = await navigator.mediaDevices.getUserMedia({ 
             video: { width: 1280, height: 720 } 
         });
         video.srcObject = stream;
         video.play();
-        document.getElementById('status').textContent = '📷 Camera Active';
-        document.getElementById('status').style.color = '#00ff88';
+        document.getElementById('status').textContent = 'Camera Active';
+        document.getElementById('status').style.color = '#ffffffff';
     } catch (err) {
         console.error('Webcam error:', err);
-        document.getElementById('status').textContent = '❌ Camera Access Denied';
+        document.getElementById('status').textContent = 'Camera Access Denied';
         document.getElementById('status').style.color = '#ff4444';
     }
 }
@@ -284,7 +284,7 @@ const toggleControlPanel = () => {
     } else {
         panel.classList.add('hidden');
         toggleBtn.textContent = '☰';
-        toggleBtn.style.right = '8px';
+        toggleBtn.style.right = '10px';
     }
 }
 
