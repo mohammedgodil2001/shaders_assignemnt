@@ -343,24 +343,102 @@
                 }
             },
             
-            pixelated: {
-                portrait: {
-                    id: 'portrait',
-                    name: 'Portrait Poster',
-                    description: 'Coming soon',
-                    fields: ['title'],
-                    defaults: { title: 'PORTRAIT' },
-                    layout: function(canvas, pattern, text) {
-                        const ctx = canvas.getContext('2d');
-                        ctx.fillStyle = '#f0f0f0';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.fillStyle = '#999';
-                        ctx.font = '40px Arial';
-                        ctx.textAlign = 'center';
-                        ctx.fillText('Portrait Template - Send Design', canvas.width/2, canvas.height/2);
-                    }
-                }
+          pixelated: {
+    portrait: {
+        id: 'portrait',
+        name: 'Portrait Poster',
+        description: 'Bold typography with pixelated portrait',
+        fields: ['title', 'subtitle', 'venue', 'time', 'nameLeft', 'nameRight'],
+        defaults: {
+            title: 'ABSTRACT',
+            subtitle: 'poster',
+            venue: 'Koninklijke Vlaamse',
+            time: '12.07 - 19:30',
+            nameLeft: 'Zaal Zilver',
+            nameRight: 'Koninklijke Vlaamse'
+        },
+        layout: function(canvas, pattern, text) {
+            const ctx = canvas.getContext('2d');
+            const { width, height } = canvas;
+            
+            // Dark background
+            ctx.fillStyle = '#2a2a2a';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Draw pixelated pattern at bottom (60% height, starting from 40%)
+            const patternTop = height * 0.40;
+            const patternHeight = height * 0.60;
+            ctx.drawImage(pattern, 0, patternTop, width, patternHeight);
+            
+            // Margins
+            const leftMargin = width * 0.065;
+            const rightMargin = width - (width * 0.065);
+            
+            // MAIN TITLE "ABSTRACT" - top left, large
+            const titleSize = width * 0.155;
+            const title = text.title.toUpperCase();
+            
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = `700 ${titleSize}px neue-haas-grotesk-display, sans-serif`;
+            ctx.textBaseline = 'top';
+            
+            // Calculate title with tight letter spacing
+            const letterSpacing = titleSize * -0.05;
+            let totalWidth = 0;
+            
+            for (let char of title) {
+                totalWidth += ctx.measureText(char).width + letterSpacing;
             }
+            totalWidth -= letterSpacing;
+            
+            // Position title at top left
+            let titleX = leftMargin;
+            const titleY = height * 0.05;
+            
+            ctx.textAlign = 'left';
+            for (let char of title) {
+                ctx.fillText(char, titleX, titleY);
+                titleX += ctx.measureText(char).width + letterSpacing;
+            }
+            
+            // SUBTITLE "poster" (script font, yellow) - below title
+            ctx.fillStyle = '#FFD700';
+            const subtitleSize = width * 0.135;
+            
+            ctx.font = `400 ${subtitleSize}px sloop-script-two, cursive`;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            ctx.fillText(text.subtitle, leftMargin + (titleSize * 0.15), height * 0.185);
+            
+            // LEFT SIDE INFO - stacked text (name on top)
+            ctx.fillStyle = '#FFFFFF';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            
+            // Name (larger)
+            ctx.font = `500 ${width * 0.025}px neue-haas-grotesk-display, sans-serif`;
+            ctx.fillText(text.nameLeft, leftMargin, height * 0.28);
+            
+            // Venue (smaller)
+            ctx.font = `400 ${width * 0.018}px neue-haas-grotesk-display, sans-serif`;
+            ctx.fillText(text.venue, leftMargin, height * 0.315);
+            
+            // Time (smaller)
+            ctx.fillText(text.time, leftMargin, height * 0.345);
+            
+            // RIGHT SIDE INFO - stacked text at same height
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'top';
+            
+            // Venue (smaller)
+            ctx.font = `400 ${width * 0.018}px neue-haas-grotesk-display, sans-serif`;
+            ctx.fillText(text.venue, rightMargin, height * 0.28);
+            
+            // Time (smaller)
+            ctx.fillText(text.time, rightMargin, height * 0.31);
+        }
+    }
+}
         };
 
         let currentSize = 'a4';
@@ -462,7 +540,9 @@
                 dateLeft: 'Date (Top Left)',
                 dateRight: 'Date (Top Right)',
                 nameLeft: 'Name (Bottom Left)',
-                nameRight: 'Name (Bottom Right)'
+                nameRight: 'Name (Bottom Right)',
+                venue: 'Venue Name',
+                time: 'Time'
             };
             
             template.fields.forEach(field => {
