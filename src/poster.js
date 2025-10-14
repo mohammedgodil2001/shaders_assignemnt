@@ -329,8 +329,8 @@ const POSTER_SIZES = {
             const fieldLabels = {
                 title: 'Main Title',
                 subtitle: 'Subtitle',
-                dateLeft: 'Date (Top Left)',
-                dateRight: 'Date (Top Right)',
+                dateLeft: 'Date (Bottom Left)',
+                dateRight: 'Date (Bottom Right)',
                 nameLeft: 'Name (Bottom Left)',
                 nameRight: 'Name (Bottom Right)',
                 venue: 'Venue Name',
