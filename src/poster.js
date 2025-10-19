@@ -383,9 +383,9 @@ const setupEventListeners = () => {
     document.getElementById('download-btn').addEventListener('click', downloadPoster);
     
     document.getElementById('back-btn').addEventListener('click', () => {
-        if (confirm('Go back to pattern editor?')) {
-            window.location.href = '/';
-        }
+        window.location.href = '/';
+        // if (confirm('Go back to pattern editor?')) {
+        // }
     });
 }
 
