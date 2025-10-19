@@ -33,6 +33,8 @@ const init = () => {
 }
 
 const initCosmicShader = () => {
+    // These values found through experimentation
+    // Lower values = smoother animation but less interesting
     cosmicUniforms = {
         iTime: { value: 0.0 },
         iResolution: { value: new THREE.Vector3(window.innerWidth, window.innerHeight, 1) },
